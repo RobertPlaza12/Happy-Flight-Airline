@@ -1,0 +1,37 @@
+[
+  {
+    "numero": "HF101",
+    "destino": "Madrid",
+    "hora": "08:30",
+    "precio": 520,
+    "asientosDisponibles": 24
+  },
+  {
+    "numero": "HF205",
+    "destino": "New York",
+    "hora": "10:15",
+    "precio": 430,
+    "asientosDisponibles": 18
+  },
+  {
+    "numero": "HF310",
+    "destino": "Miami",
+    "hora": "13:45",
+    "precio": 280,
+    "asientosDisponibles": 30
+  },
+  {
+    "numero": "HF420",
+    "destino": "San Juan",
+    "hora": "17:20",
+    "precio": 190,
+    "asientosDisponibles": 12
+  },
+  {
+    "numero": "HF512",
+    "destino": "Madrid",
+    "hora": "21:00",
+    "precio": 560,
+    "asientosDisponibles": 8
+  }
+]

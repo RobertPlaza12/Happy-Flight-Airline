@@ -1,0 +1,38 @@
+* { box-sizing: border-box; }
+:root {
+  --azul: #123b70;
+  --azul-claro: #eaf3ff;
+  --amarillo: #ffd45a;
+  --texto: #203047;
+}
+body { margin: 0; font-family: Arial, Helvetica, sans-serif; color: var(--texto); background: #f7f9fc; }
+.encabezado { display:flex; justify-content:space-between; align-items:center; padding:18px 7%; background:white; box-shadow:0 2px 10px #00000010; }
+.marca { font-size:1.35rem; font-weight:bold; color:var(--azul); }
+.marca span { color:#e5a900; }
+nav { display:flex; gap:22px; }
+nav a { text-decoration:none; color:var(--azul); font-weight:600; }
+.hero { min-height:340px; padding:65px 9%; display:flex; align-items:center; color:white; background:linear-gradient(110deg,#123b70dd,#2878b8cc), url("https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1600&q=80") center/cover; }
+.hero h1 { font-size:clamp(2.2rem,5vw,3.8rem); margin:12px 0; }
+.hero p { font-size:1.05rem; }
+.etiqueta { text-transform:uppercase; letter-spacing:2px; font-size:.8rem !important; }
+.seccion { max-width:1000px; margin:45px auto; padding:0 22px; }
+h2 { color:var(--azul); margin-bottom:8px; }
+.subtitulo { color:#66758a; margin-top:0; }
+.formulario { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px; background:white; padding:22px; border-radius:12px; box-shadow:0 4px 18px #17365d0b; }
+.formulario label { display:flex; flex-direction:column; gap:7px; font-weight:600; font-size:.92rem; }
+input, select { width:100%; padding:12px; border:1px solid #ccd6e3; border-radius:7px; font:inherit; background:white; }
+input:focus, select:focus { outline:2px solid #9bc7ff; border-color:#4b91d8; }
+.boton { border:0; border-radius:8px; padding:12px 20px; background:var(--amarillo); color:#27364b; font-weight:bold; cursor:pointer; text-decoration:none; display:inline-block; }
+.boton:hover { filter:brightness(.96); }
+.busqueda { align-items:end; }
+.busqueda .boton { min-height:43px; }
+.resultados { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:20px; }
+.vuelo { background:white; padding:18px; border-radius:10px; border-left:4px solid #2c83c7; box-shadow:0 3px 12px #00000008; }
+.vuelo h3 { margin:0 0 10px; color:var(--azul); }
+.vuelo p { margin:7px 0; }
+.vuelo .boton { margin-top:10px; }
+.mensaje { color:#66758a; }
+.registro { padding-bottom:35px; }
+#form-registro .boton { grid-column:1/-1; justify-self:start; }
+footer { text-align:center; padding:24px; color:#718096; background:white; }
+@media (max-width:600px) { .encabezado { flex-direction:column; gap:14px; } nav { gap:15px; } .hero { padding:50px 7%; } }
