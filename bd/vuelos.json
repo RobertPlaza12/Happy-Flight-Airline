@@ -1,37 +1,33 @@
-[
-  {
-    "numero": "HF101",
-    "destino": "Madrid",
-    "hora": "08:30",
-    "precio": 520,
-    "asientosDisponibles": 24
-  },
-  {
-    "numero": "HF205",
-    "destino": "New York",
-    "hora": "10:15",
-    "precio": 430,
-    "asientosDisponibles": 18
-  },
-  {
-    "numero": "HF310",
-    "destino": "Miami",
-    "hora": "13:45",
-    "precio": 280,
-    "asientosDisponibles": 30
-  },
-  {
-    "numero": "HF420",
-    "destino": "San Juan",
-    "hora": "17:20",
-    "precio": 190,
-    "asientosDisponibles": 12
-  },
-  {
-    "numero": "HF512",
-    "destino": "Madrid",
-    "hora": "21:00",
-    "precio": 560,
-    "asientosDisponibles": 8
-  }
-]
+{
+  "vuelos": [
+    {
+      "id": "V001",
+      "origen": "Santo Domingo",
+      "destino": "Madrid",
+      "horaSalida": "08:30",
+      "fechaSalida": "2026-06-15",
+      "precio": 850,
+      "aerolinea": "Happy Flight"
+    },
+    {
+      "id": "V002",
+      "origen": "Santo Domingo",
+      "destino": "Miami",
+      "horaSalida": "14:00",
+      "fechaSalida": "2026-06-15",
+      "precio": 320,
+      "aerolinea": "Happy Flight"
+    },
+    {
+      "id": "V003",
+      "origen": "Madrid",
+      "destino": "París",
+      "horaSalida": "10:15",
+      "fechaSalida": "2026-06-16",
+      "precio": 150,
+      "aerolinea": "Happy Flight"
+    }
+  ],
+  "usuarios": [],
+  "reservas": []
+}

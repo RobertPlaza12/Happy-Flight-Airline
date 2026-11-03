@@ -8,11 +8,12 @@
 </head>
 <body>
   <header class="encabezado">
-    <div class="marca">✈ Happy Flight <span>Airline</span></div>
+    <div class="marca">Happy Flight <span>Airline</span></div>
     <nav>
       <a href="#inicio">Inicio</a>
-      <a href="#buscar">Vuelos</a>
+      <a href="#buscar">Reservas</a>
       <a href="#registro">Registro</a>
+      <a href="#login">Iniciar sesión</a>
     </nav>
   </header>
 
@@ -30,11 +31,17 @@
       <h2>Buscar vuelos</h2>
       <p class="subtitulo">Consulta los vuelos disponibles por destino y hora de partida.</p>
       <form id="form-busqueda" class="formulario busqueda">
+        <label>Origen
+          <input type="text" id="origen" placeholder="Ej. Santo Domingo" required>
+        </label>
         <label>Destino
           <input type="text" id="destino" placeholder="Ej. Madrid" required>
         </label>
-        <label>Hora de partida (desde)
+        <label>Hora de partida (origen)
           <input type="time" id="hora" required>
+        </label>
+        <label>Fecha (origen)
+          <input type="date" id="fecha" required>
         </label>
         <button class="boton" type="submit">Buscar</button>
       </form>
@@ -43,9 +50,12 @@
       </div>
     </section>
 
+    <div id="resultados" class="resultados">
+      <p class="mensaje">No hay vuelos disponibles de momento.</p>
+    </div>
   </main>
 
   <footer>© 2026 Happy Flight Airline · Demo </footer>
-  <script src="js/script.js"></script>
+  <script src="js/index.js"></script>
 </body>
 </html>
