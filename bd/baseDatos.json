@@ -1,0 +1,54 @@
+{
+  "vuelos": [
+    {
+      "id": "V001",
+      "origen": "Santo Domingo",
+      "destino": "Madrid",
+      "horaSalida": "08:30",
+      "fechaSalida": "2026-12-15",
+      "precio": 50500,
+      "asientosDisponibles": 50
+    },
+    {
+      "id": "V002",
+      "origen": "Santo Domingo",
+      "destino": "Miami",
+      "horaSalida": "14:00",
+      "fechaSalida": "2026-12-15",
+      "precio": 25850,
+      "asientosDisponibles": 100
+    },
+    {
+      "id": "V003",
+      "origen": "Santo Domingo",
+      "destino": "París",
+      "horaSalida": "10:15",
+      "fechaSalida": "2026-12-16",
+      "precio": 55600,
+      "asientosDisponibles": 75
+    }
+  ],
+  "usuarios": [
+    {
+      "id": "U001",
+      "nombre": "Juan Díaz",
+      "email": "juan.diaz@gmail.com",
+      "contraseña": "123456",
+      "direccion": "santo domingo, republica dominicana",
+      "telefono": "809-123-4567",
+      "tipoCliente": "minorista",
+      "millas": null
+    },
+    {
+      "id": "U002",
+      "nombre": "Rosa Pérez",
+      "email": "rosa.perez@gmail.com",
+      "contraseña": "123456",
+      "direccion": "santo domingo, republica dominicana",
+      "telefono": "809-546-4897",
+      "tipoCliente": "ejecutivo",
+      "millas": 1000
+    }
+  ],
+  "reservas": []
+}

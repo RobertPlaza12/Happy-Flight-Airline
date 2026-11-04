@@ -1,13 +1,13 @@
-// ===== Configuración =====
+// ===== Configuración BD =====
 const RUTA_BD = 'bd/baseDatos.json';
+let usuariosDB = [];
+const CLAVE_SESION = 'hf_usuarioId';
+let usuarioId = null;
 
-let vuelosDisponibles = [];
-
-// ===== Referencias al DOM =====
 const contenedorResultados = document.querySelector('#buscar .resultados');
 const formBusqueda = document.getElementById('form-busqueda');
 
-// ===== Utilidades =====
+// ===== Utilidades para arreglar el texto =====
 function normalizar(texto) {
   return (texto || '')
     .toString()
@@ -24,7 +24,66 @@ function formatearPrecio(n) {
   }).format(n);
 }
 
-// ===== Render de tarjetas =====
+function obtenerUsuarioId() {
+  const params = new URLSearchParams(window.location.search);
+  const desdeUrl = params.get('usuarioId');
+  if (desdeUrl) {
+    localStorage.setItem(CLAVE_SESION, desdeUrl);
+    return desdeUrl;
+  }
+  return localStorage.getItem(CLAVE_SESION);
+}
+
+function obtenerNombreUsuario(id) {
+  if (!id) return '';
+  const usuario = usuariosDB.find(u => u.id === id);
+  return usuario?.nombre || id; // si no lo encuentra, muestra el id ultomo id
+}
+
+function actualizarUIUsuario() {
+  const contenedor = document.querySelector('.acciones-sesion');
+  if (!contenedor) return;
+
+  if (usuarioId) {
+    const nombreMostrar = obtenerNombreUsuario(usuarioId);
+
+    contenedor.innerHTML = `
+      <a href="reserva.html?usuarioId=${usuarioId}" class="btn-sesion login">Ver Reservas</a>
+      <div class="menu-usuario">
+        <button class="btn-usuario" id="btn-menu-usuario" aria-haspopup="true" aria-expanded="false">
+          <span class="btn-usuario-nombre">${nombreMostrar}</span>
+          <span class="btn-usuario-flecha">▾</span>
+        </button>
+        <div class="dropdown-usuario" id="dropdown-usuario" hidden>
+          <a href="perfil.html?usuarioId=${usuarioId}" class="dropdown-item">Ver perfil</a>
+          <button type="button" class="dropdown-item cerrar" id="cerrar-sesion">Cerrar sesión</button>
+        </div>
+      </div>
+    `;
+
+    const btnMenu = document.getElementById('btn-menu-usuario');
+    const dropdown = document.getElementById('dropdown-usuario');
+
+    btnMenu.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const abierto = !dropdown.hidden;
+      dropdown.hidden = abierto;
+      btnMenu.setAttribute('aria-expanded', String(!abierto));
+    });
+
+    document.getElementById('cerrar-sesion').addEventListener('click', () => {
+      localStorage.removeItem(CLAVE_SESION);
+      window.location.href = 'index.html';
+    });
+
+  } else {
+    contenedor.innerHTML = `
+      <a href="login.html" class="btn-sesion login">Iniciar sesión</a>
+      <a href="registro.html" class="btn-sesion registro">Registrarse</a>
+    `;
+  }
+}
+
 function crearTarjetaVuelo(vuelo) {
   const card = document.createElement('article');
   card.className = 'vuelo';
@@ -33,12 +92,12 @@ function crearTarjetaVuelo(vuelo) {
     <h3>${vuelo.origen} → ${vuelo.destino}</h3>
     <p><strong>Fecha:</strong> ${vuelo.fechaSalida}</p>
     <p><strong>Hora de salida:</strong> ${vuelo.horaSalida}</p>
+    <p><strong>Asientos Disponibles:</strong> ${vuelo.asientosDisponibles}</p
     <p><strong>Precio:</strong> ${formatearPrecio(vuelo.precio)}</p>
     <p><strong>Vuelo:</strong> ${vuelo.id}</p>
     <button class="boton" data-id="${vuelo.id}">Reservar</button>
   `;
 
-  // Botón reservar (queda listo para integrarlo con reservas)
   card.querySelector('button').addEventListener('click', () => {
     reservarVuelo(vuelo);
   });
@@ -62,7 +121,7 @@ function renderizarVuelos(lista) {
   contenedorResultados.appendChild(fragmento);
 }
 
-// ===== Carga inicial =====
+// ===== Carga toda la pagina =====
 async function cargarVuelos() {
   try {
     const respuesta = await fetch(RUTA_BD);
@@ -70,7 +129,10 @@ async function cargarVuelos() {
 
     const datos = await respuesta.json();
     vuelosDisponibles = Array.isArray(datos.vuelos) ? datos.vuelos : [];
+    usuariosDB = Array.isArray(datos.usuarios) ? datos.usuarios : [];
 
+    // Refresca la UI por si el nombre se calcula tras cargar la BD
+    actualizarUIUsuario();
     // Mostrar todos los vuelos al cargar
     renderizarVuelos(vuelosDisponibles);
   } catch (error) {
@@ -80,7 +142,6 @@ async function cargarVuelos() {
   }
 }
 
-// ===== Búsqueda =====
 function buscarVuelos({ origen, destino, hora, fecha }) {
   const o = normalizar(origen);
   const d = normalizar(destino);
@@ -89,7 +150,6 @@ function buscarVuelos({ origen, destino, hora, fecha }) {
     const coincideOrigen = !o || normalizar(v.origen).includes(o);
     const coincideDestino = !d || normalizar(v.destino).includes(d);
 
-    // Hora: interpretamos "hora de partida (origen)" como hora exacta o posterior
     const coincideHora = !hora || v.horaSalida >= hora;
     const coincideFecha = !fecha || v.fechaSalida === fecha;
 
@@ -109,14 +169,40 @@ function manejarBusqueda(evento) {
   renderizarVuelos(resultados);
 }
 
-// ===== Reserva (placeholder, listo para ampliar) =====
 function reservarVuelo(vuelo) {
-  // Aquí podrías guardar la reserva en bd/reservas o redirigir al registro.
-  alert(`Vuelo seleccionado:\n${vuelo.origen} → ${vuelo.destino}\n${vuelo.fechaSalida} ${vuelo.horaSalida}`);
+  if (!usuarioId) {
+    // Sin sesión lo manda a registrarse
+    window.location.href = 'registro.html';
+    return;
+  }
+
+  // Con sesión lo manda a reserva.html con datos del usuario y vuelo
+  const params = new URLSearchParams({
+    usuarioId,
+    vueloId: vuelo.id
+  });
+  window.location.href = `reserva.html?${params.toString()}`;
 }
 
-// ===== Inicialización =====
+// ===== Inicialización, actualiza el bloque =====
 document.addEventListener('DOMContentLoaded', () => {
+  usuarioId = obtenerUsuarioId();
+  actualizarUIUsuario();
   cargarVuelos();
   formBusqueda.addEventListener('submit', manejarBusqueda);
 });
+
+document.addEventListener('click', (e) => {
+  const dropdown = document.getElementById('dropdown-usuario');
+  const btnMenu = document.getElementById('btn-menu-usuario');
+  if (!dropdown || dropdown.hidden) return;
+
+  const clickDentroDropdown = dropdown.contains(e.target);
+  const clickEnBoton = btnMenu && btnMenu.contains(e.target);
+
+  if (!clickDentroDropdown && !clickEnBoton) {
+    dropdown.hidden = true;
+    btnMenu.setAttribute('aria-expanded', 'false');
+  }
+});
+
