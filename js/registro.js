@@ -8,6 +8,10 @@ const errorBox = document.getElementById('registro-error');
 const okBox = document.getElementById('registro-ok');
 const btnRegistro = document.getElementById('btn-registro');
 
+const selectTipoCliente = document.getElementById('tipoCliente');
+const labelNombreCompania = document.getElementById('label-nombreCompania');
+const inputNombreCompania = document.getElementById('nombreCompania');
+
 function mostrarError(msg) {
   okBox.hidden = true;
   errorBox.textContent = msg;
@@ -45,18 +49,30 @@ async function cargarUsuariosBase() {
     return Array.isArray(datos.usuarios) ? datos.usuarios : [];
   } catch (err) {
     console.error('Error cargando BD:', err);
-    return []; // si falla, al menos permitimos registrar contra los extra
+    return [];
   }
 }
 
 function generarId(usuariosExistentes) {
-  // IDs tipo U001, U002... basados en el máximo actual + 1
   const numeros = usuariosExistentes
     .map(u => parseInt(String(u.id).replace(/\D/g, ''), 10))
     .filter(n => !isNaN(n));
   const siguiente = (numeros.length ? Math.max(...numeros) : 0) + 1;
   return 'U' + String(siguiente).padStart(3, '0');
 }
+
+// Mostrar/ocultar el campo "nombreCompania" según el tipo de cliente
+function actualizarVisibilidadCompania() {
+  const esEjecutivo = selectTipoCliente.value === 'ejecutivo';
+  labelNombreCompania.hidden = !esEjecutivo;
+
+  if (!esEjecutivo) {
+    inputNombreCompania.value = '';
+  }
+}
+
+selectTipoCliente.addEventListener('change', actualizarVisibilidadCompania);
+actualizarVisibilidadCompania(); // estado inicial (oculto)
 
 formRegistro.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -68,7 +84,8 @@ formRegistro.addEventListener('submit', async (e) => {
     password: document.getElementById('password').value,
     direccion: document.getElementById('direccion').value.trim(),
     telefono: document.getElementById('telefono').value.trim(),
-    tipoCliente: document.getElementById('tipoCliente').value
+    tipoCliente: selectTipoCliente.value,
+    nombreCompania: inputNombreCompania.value.trim()
   };
 
   // Validaciones básicas
@@ -91,6 +108,17 @@ formRegistro.addEventListener('submit', async (e) => {
   if (!['minorista', 'ejecutivo'].includes(nuevo.tipoCliente)) {
     mostrarError('Selecciona un tipo de cliente válido.');
     return;
+  }
+
+  // Validación condicional: ejecutivos deben indicar compañía
+  if (nuevo.tipoCliente === 'ejecutivo' && !nuevo.nombreCompania) {
+    mostrarError('Los clientes ejecutivos deben indicar el nombre de su compañía.');
+    return;
+  }
+
+  // Si es minorista, guardamos null en lugar del campo vacío
+  if (nuevo.tipoCliente !== 'ejecutivo') {
+    nuevo.nombreCompania = null;
   }
 
   btnRegistro.disabled = true;
@@ -118,7 +146,6 @@ formRegistro.addEventListener('submit', async (e) => {
 
     mostrarOk(`¡Cuenta creada! Bienvenido, ${usuario.nombre}.`);
 
-    // Redirigir al index con sesión activa
     setTimeout(() => {
       window.location.href = `index.html?usuarioId=${encodeURIComponent(usuario.id)}`;
     }, 900);
