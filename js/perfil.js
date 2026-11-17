@@ -121,6 +121,7 @@ async function cargarDatosPerfil() {
     document.getElementById('view-telefono').textContent = usuarioCargado.telefono || '-';
     document.getElementById('view-direccion').textContent = usuarioCargado.direccion || '-';
     document.getElementById('view-tipoCliente').textContent = usuarioCargado.tipoCliente || '-';
+    document.getElementById('view-compania').textContent = usuarioCargado.nombreCompania || '-';
 
     // Mostrar millas si es ejecutivo
     if (usuarioCargado.tipoCliente === 'ejecutivo') {
@@ -144,6 +145,7 @@ btnEditar.addEventListener('click', () => {
   document.getElementById('perfil-direccion').value = usuarioCargado.direccion || '';
   document.getElementById('perfil-telefono').value = usuarioCargado.telefono || '';
   document.getElementById('perfil-tipoCliente').value = usuarioCargado.tipoCliente || '';
+  document.getElementById('perfil-compania').value = usuarioCargado.nombreCompania || '';
   document.getElementById('perfil-password').value = ''; // Siempre vacío
 
   vistaLectura.hidden = true;
