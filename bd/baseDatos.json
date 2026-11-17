@@ -70,7 +70,7 @@
       "direccion": "santo domingo, republica dominicana",
       "telefono": "809-123-4567",
       "tipoCliente": "minorista",
-      "nombreCompañía": null,
+      "nombreCompania": null,
       "millas": null
     },
     {
@@ -81,7 +81,7 @@
       "direccion": "santo domingo, republica dominicana",
       "telefono": "809-546-4897",
       "tipoCliente": "ejecutivo",
-      "nombreCompañía": "Universidad Autónoma de Santo Domingo",
+      "nombreCompania": "Universidad Autónoma de Santo Domingo",
       "millas": 10000
     }
   ],
