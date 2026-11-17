@@ -50,6 +50,16 @@ function iniciarSesion(usuarioId) {
   window.location.href = `index.html?usuarioId=${encodeURIComponent(usuarioId)}`;
 }
 
+function sugerirRecuperacion() {
+  const acepta = confirm(
+    '¿Deseas recuperar tu contraseña?\n\nSe enviará un correo con las instrucciones para restablecerla.'
+  );
+
+  if (acepta) {
+    alert('Se ha enviado un correo de recuperación a tu dirección registrada.');
+  }
+}
+
 formLogin.addEventListener('submit', async (e) => {
   e.preventDefault();
   limpiarError();
@@ -68,16 +78,27 @@ formLogin.addEventListener('submit', async (e) => {
   try {
     const usuarios = await cargarUsuarios();
 
-    const usuario = usuarios.find(u =>
+    const usuarioPorEmail = usuarios.find(u =>
+      (u.email || '').toLowerCase() === email
+    );
+
+    const usuarioValido = usuarios.find(u =>
       (u.email || '').toLowerCase() === email && u.password === password
     );
 
-    if (!usuario) {
-      mostrarError('Correo o contraseña incorrectos.');
+    if (usuarioValido) {
+      iniciarSesion(usuarioValido.id);
       return;
     }
 
-    iniciarSesion(usuario.id);
+    // Credenciales incorrectas
+    if (usuarioPorEmail) {
+      mostrarError('Contraseña incorrecta. ¿Olvidaste tu contraseña?');
+    } else {
+      mostrarError('Correo o contraseña incorrectos. ¿Olvidaste tu contraseña?');
+    }
+
+    sugerirRecuperacion();
 
   } catch (err) {
     mostrarError('No se pudo conectar con el servidor. Intenta de nuevo.');
